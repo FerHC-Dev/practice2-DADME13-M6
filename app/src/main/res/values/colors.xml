@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="pokeBackground">#0A3672</color>
+    <color name="pokeYellow">#F5DC53</color>
+    <color name="pokeCyan">#3FE0DD</color>
+    <color name="pokeRed">#FF0000</color>
+    <color name="pokeGreen">#00FF00</color>
+    <color name="pokeTitle">#CBD5ED</color>
+</resources>

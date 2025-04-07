@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">PokemonRF</string>
+
+    <string name="element_title">Pokemon #%s</string>
+    <string name="element_id">ID</string>
+    <string name="element_name">Nombre</string>
+    <string name="element_region">Region</string>
+
+    <string name="detail_name">Nombre</string>
+    <string name="detail_type">Type 1: %s</string>
+    <string name="detail_type2">Type 2: %s</string>
+    <string name="detail_abilities">Abilities: %s</string>
+    <string name="detail_species">Species: %s</string>
+    <string name="detail_Height">Height: %s</string>
+    <string name="detail_weight">Weight: %s</string>
+</resources>
