@@ -1,6 +1,5 @@
 package diplomado.practice2.ui
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -11,17 +10,21 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.snackbar.Snackbar
 import diplomado.practice2.R
+import diplomado.practice2.databinding.ActivitySplashScreenBinding
 
-@SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivitySplashScreenBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivitySplashScreenBinding.inflate(layoutInflater)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_splash_screen)
+        setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -30,7 +33,7 @@ class SplashScreenActivity : AppCompatActivity() {
 
         //val splashScreen = installSplashScreen()
         //splashScreen.setKeepOnScreenCondition { true }
-
+        message(getString(R.string.txtConnected))
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.S){
             val icon = findViewById<ImageView>(R.id.ivIcon)
             val fadeInAnimation: Animation = AnimationUtils.loadAnimation(this, R.anim.animated_icon)
@@ -47,4 +50,14 @@ class SplashScreenActivity : AppCompatActivity() {
             finish()
         }
     }
+
+
+    private fun message(text : String) {
+        Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
+            .setTextColor(getColor(R.color.white))
+            .setBackgroundTint(getColor(R.color.black))
+            .show()
+    }
+
+
 }

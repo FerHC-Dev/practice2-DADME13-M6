@@ -7,14 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import diplomado.practice2.R
 import diplomado.practice2.application.PokemonRFApp
 import diplomado.practice2.data.PokemonRepository
 import diplomado.practice2.databinding.FragmentPokemonDetailBinding
+import diplomado.practice2.utils.Constants
+import diplomado.practice2.utils.isNetworkAvailable
 import kotlinx.coroutines.launch
 
-private const val ARG_GAMEID = "id"
-private const val ARG_POKENAME = "name"
+
 
 class PokemonDetailFragment : Fragment() {
 
@@ -29,8 +31,8 @@ class PokemonDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let { args ->
-            pokemonId = args.getString(ARG_GAMEID)
-            pokemonName = args.getString(ARG_POKENAME)
+            pokemonId = args.getString(Constants.ARG_GAMEID)
+            pokemonName = args.getString(Constants.ARG_POKENAME)
         }
     }
 
@@ -45,33 +47,41 @@ class PokemonDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        repository = (requireActivity().application as PokemonRFApp).repository
+        if(checkNetworkAndLoadData()) {
+            repository = (requireActivity().application as PokemonRFApp).repository
 
-        lifecycleScope.launch {
-            try{
-                val pokemonDetail = repository.getPokemonDetail(pokemonId)
+            lifecycleScope.launch {
+                try{
+                    val pokemonDetail = repository.getPokemonDetail(pokemonId)
 
-                binding.apply {
-                    tvTitle.text = pokemonName
+                    binding.apply {
+                        tvTitle.text = pokemonName
 
-                    tvType1.text = getString(R.string.detail_type,pokemonDetail.type)
-                    tvType2.text = getString(R.string.detail_type2,pokemonDetail.type2)
-                    tvHeight.text = getString(R.string.detail_Height,pokemonDetail.height)
-                    tvWeight.text = getString(R.string.detail_weight,pokemonDetail.weight)
-                    tvAbilities.text = getString(R.string.detail_abilities,pokemonDetail.abilitie)
-                    tvSpecies.text = getString(R.string.detail_species,pokemonDetail.species)
-                    Glide.with(requireContext())
-                        .load(pokemonDetail.image)
-                        .into(ivImage)
+                        tvType1.text = getString(R.string.detail_type,pokemonDetail.type)
+                        tvType2.text = getString(R.string.detail_type2,pokemonDetail.type2)
+                        tvHeight.text = getString(R.string.detail_Height,pokemonDetail.height)
+                        tvWeight.text = getString(R.string.detail_weight,pokemonDetail.weight)
+                        tvAbilities.text = getString(R.string.detail_abilities,pokemonDetail.abilitie)
+                        tvSpecies.text = getString(R.string.detail_species,pokemonDetail.species)
+                        Glide.with(requireContext())
+                            .load(pokemonDetail.image)
+                            .into(ivImage)
+                    }
+
+                }catch (e: Exception){
+                    message(getString(R.string.error_message, e.message))
+                }finally {
+                    binding.pbLoading.visibility = View.GONE
                 }
-
-            }catch (e: Exception){
-                e.printStackTrace()
-            }finally {
-                binding.pbLoading.visibility = View.GONE
+            }
+        }else{
+            binding.btnRetry.setOnClickListener {
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, PokemonListFragment())
+                    .addToBackStack(null)
+                    .commit()
             }
         }
-
     }
 
 
@@ -85,9 +95,30 @@ class PokemonDetailFragment : Fragment() {
         fun newInstance(id: String, pokemonName: String) =
             PokemonDetailFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_GAMEID, id)
-                    putString(ARG_POKENAME, pokemonName)
+                    putString(Constants.ARG_GAMEID, id)
+                    putString(Constants.ARG_POKENAME, pokemonName)
                 }
             }
+    }
+
+    private fun checkNetworkAndLoadData(): Boolean {
+        if (isNetworkAvailable(requireContext())) {
+            // Si hay conexión, cargar los datos
+            return true
+        } else {
+            // Si no hay conexión, mostrar el mensaje de error y el botón de reintentar
+            binding.txtConnection.visibility = View.VISIBLE
+            binding.btnRetry.visibility = View.VISIBLE
+            binding.pbLoading.visibility = View.GONE
+            message(getString(R.string.error_connection))
+            return false
+        }
+    }
+
+    private fun message(text : String) {
+        Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
+            .setTextColor(requireContext().getColor(R.color.white))
+            .setBackgroundTint(requireContext().getColor(R.color.black))
+            .show()
     }
 }

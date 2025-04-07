@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">PokemonRF</string>
     <string name="imgDesc">Image</string>
+    <string name="btnRetry">Recargar</string>
+    <string name="txtConnection">Sin conexión a internet</string>
+    <string name="txtConnected">Cargando informacion</string>
 
     <string name="element_title">Pokemon #%s</string>
     <string name="element_id">ID</string>
@@ -14,4 +17,9 @@
     <string name="detail_species">Species: %s</string>
     <string name="detail_Height">Height: %s</string>
     <string name="detail_weight">Weight: %s</string>
+
+    <string name="error_message">Error: %s</string>
+    <string name="error_connection">Error al conectar con el servidor</string>
+    <string name="error_loading">Error al cargar los datos</string>
+    <string name="error_launching">Error al lanzar la actividad</string>
 </resources>

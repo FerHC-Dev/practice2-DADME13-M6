@@ -132,8 +132,29 @@
                 android:indeterminateDrawable="@drawable/loading_anim"
                 android:indeterminateDuration="1500"
                 />
-
         </RelativeLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/btnRetry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/btnRetry"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/txtConnection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txtConnection"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="60dp"
+        android:visibility="gone"
+
+        />
+
 </FrameLayout>
